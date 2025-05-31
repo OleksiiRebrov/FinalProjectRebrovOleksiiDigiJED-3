@@ -12,15 +12,12 @@
 
 <script>
     console.log('Dashboard: Attempting to fetch books using session authentication.');
-    // Тепер не потрібна перевірка токена, оскільки ми покладаємося на сесію
     fetch('/books') // Просто робимо запит, кука JSESSIONID надішлеться автоматично
         .then(response => {
             console.log('Dashboard: Fetch /books response status:', response.status);
             if (response.ok) {
                 return response.json();
             } else {
-                // Якщо тут 401/403, то сесія чомусь не спрацювала,
-                // тоді дійсно потрібно на логін
                 if (response.status === 401 || response.status === 403) {
                     console.error('Dashboard: Session authentication failed for /books, redirecting to login.');
                     window.location.href = '/login.html';
