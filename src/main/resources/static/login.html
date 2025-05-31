@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<h2>Login</h2>
+<div id="errorMessage" style="color: red;"></div> <!-- Місце для повідомлень про помилки -->
+<form id="loginForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
+    <button type="submit">Login</button>
+</form>
+<p><a href="/oauth2/authorization/google">Login with Google</a></p>
+<p>Don't have an account? <a href="/register.html">Register here</a></p>
+
+<script>
+    console.log("Login page script loaded.");
+    const loginForm = document.getElementById('loginForm');
+    const errorMessageDiv = document.getElementById('errorMessage');
+
+    if (loginForm) {
+        console.log("Login form found.");
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault(); // Запобігаємо стандартній відправці форми
+            errorMessageDiv.textContent = ''; // Очищуємо попередні помилки
+            console.log("Login form submit event triggered.");
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            console.log('Attempting login for:', username);
+
+            try {
+                const response = await fetch('/login', { // Запит на /login
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                console.log('Login response status:', response.status);
+
+                if (response.ok) { // Очікуємо 200 OK
+                    console.log('Login successful via fetch. Redirecting to dashboard...');
+                    // alert('Login successful! Redirecting to dashboard...'); // Можна прибрати alert
+                    window.location.href = '/dashboard'; // Перенаправляємо на дашборд
+                } else {
+                    // Якщо сервер повернув помилку (наприклад, 401 Unauthorized)
+                    let errorMsg = 'Login failed. Status: ' + response.status;
+                    try {
+                        const errorData = await response.json(); // Спробуємо отримати JSON з помилкою
+                        if (errorData && errorData.message) {
+                            errorMsg = errorData.message;
+                        } else if (errorData && errorData.error) {
+                            errorMsg = errorData.error;
+                        }
+                    } catch (jsonError) {
+                        // Якщо відповідь не JSON, може бути просто текст
+                        try {
+                            errorMsg = await response.text() || errorMsg;
+                        } catch(textError) {
+                            // Залишаємо попереднє повідомлення
+                        }
+                    }
+                    console.error('Login failed:', errorMsg);
+                    errorMessageDiv.textContent = errorMsg; // Показуємо помилку на сторінці
+                    // alert(errorMsg); // Можна замінити на відображення на сторінці
+                }
+            } catch (error) {
+                console.error('Network or other error during login process:', error);
+                errorMessageDiv.textContent = 'An error occurred. Please try again.';
+                // alert('An error occurred. Please try again.');
+            }
+        });
+    } else {
+        console.error("Login form with id 'loginForm' not found!");
+    }
+</script>
+</body>
+</html>

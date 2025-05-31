@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Welcome to Library Management System</h1>
+<div id="content">
+    <p>Loading...</p>
+</div>
+
+<script>
+    console.log('Dashboard: Attempting to fetch books using session authentication.');
+    // Тепер не потрібна перевірка токена, оскільки ми покладаємося на сесію
+    fetch('/books') // Просто робимо запит, кука JSESSIONID надішлеться автоматично
+        .then(response => {
+            console.log('Dashboard: Fetch /books response status:', response.status);
+            if (response.ok) {
+                return response.json();
+            } else {
+                // Якщо тут 401/403, то сесія чомусь не спрацювала,
+                // тоді дійсно потрібно на логін
+                if (response.status === 401 || response.status === 403) {
+                    console.error('Dashboard: Session authentication failed for /books, redirecting to login.');
+                    window.location.href = '/login.html';
+                }
+                throw new Error('Failed to load books, status: ' + response.status);
+            }
+        })
+        .then(books => {
+            console.log('Dashboard: Books data received:', books);
+            document.getElementById('content').innerHTML =
+                '<h2>Books:</h2>' +
+                books.map(book => `<p>${book.title} by ${book.author.name}</p>`).join('');
+        })
+        .catch(error => {
+            console.error('Dashboard: Error fetching or processing books:', error);
+            document.getElementById('content').innerHTML = `<p>Error loading books: ${error.message}</p>`;
+        });
+</script>
+</body>
+</html>
