@@ -2,7 +2,7 @@
 
 **Виконав:** Ребров Олексій
 
-Render-server: https://final-project-rebrov.onrender.com
+Render: https://final-project-rebrov.onrender.com
 
 ### Завдання:
 
