@@ -50,6 +50,6 @@ output {
     password => "${ELASTIC_PASSWORD}"
 
   }
-  # stdout { codec => rubydebug } # Раскомментируйте для отладки
+  # stdout { codec => rubydebug } # Розкоментуйте для відладки
 }
 ```
