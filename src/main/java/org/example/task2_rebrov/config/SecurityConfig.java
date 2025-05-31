@@ -27,13 +27,13 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register", "/login", "/register.html", "/login.html", "/privacy", "/terms", "/privacy.html", "/terms.html").permitAll()
-                        .requestMatchers("/login/oauth2/code/**", "/oauth2/**").permitAll() // Разрешаем OAuth2 endpoints
+                        .requestMatchers("/login/oauth2/code/**", "/oauth2/**").permitAll() // OAuth2 endpoints
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login.html")
-                        .successHandler(oAuth2LoginSuccessHandler) // Добавляем обработчик успешной авторизации
+                        .successHandler(oAuth2LoginSuccessHandler) // Обработчик успешной авторизации
                         .failureUrl("/login.html?error=oauth2")
                 );
 //                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

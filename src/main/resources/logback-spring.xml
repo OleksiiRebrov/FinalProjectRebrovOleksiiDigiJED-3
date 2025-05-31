@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- Можно определить хост и порт здесь или в application.properties -->
-    <property name="LOGSTASH_HOST" value="localhost"/> <!-- Хост, где запущен Logstash -->
-    <property name="LOGSTASH_PORT" value="5000"/>      <!-- Порт, который слушает Logstash (из logstash-minimal.conf) -->
-    <property name="APP_NAME" value="task2-rebrov"/>   <!-- Имя вашего приложения -->
+
+    <property name="LOGSTASH_HOST" value="localhost"/>
+    <property name="LOGSTASH_PORT" value="5000"/>
+    <property name="APP_NAME" value="task2-rebrov"/>
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
@@ -19,12 +19,12 @@
         </encoder>
     </appender>
 
-    <root level="INFO"> <!-- Установите нужный уровень логирования -->
+    <root level="INFO">
         <appender-ref ref="CONSOLE" />
-        <appender-ref ref="LOGSTASH" /> <!-- Подключаем аппендер Logstash -->
+        <appender-ref ref="LOGSTASH" />
     </root>
 
-    <!-- Чтобы логи самого Logback appender'а не шли в Logstash по кругу -->
+
     <logger name="net.logstash.logback" level="WARN" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>

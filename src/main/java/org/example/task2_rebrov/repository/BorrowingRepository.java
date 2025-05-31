@@ -10,12 +10,9 @@ import java.util.Optional;
 @Repository
 public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
 
-    // Find all records where the book is not returned
     List<Borrowing> findByReturnedFalse();
 
-    // Check if an active borrowing exists for a specific book
     boolean existsByBookIdAndReturnedFalse(Long bookId);
 
-    // Find an active borrowing by book ID
     Optional<Borrowing> findByBookIdAndReturnedFalse(Long bookId);
 }

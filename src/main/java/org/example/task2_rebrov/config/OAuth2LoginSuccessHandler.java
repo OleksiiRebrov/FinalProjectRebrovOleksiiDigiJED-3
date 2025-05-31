@@ -41,10 +41,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                     return userRepository.save(newUser);
                 });
 
-        // Генерируем JWT токен
+        //JWT токен
         String token = jwtUtil.generateToken(user.getUsername());
 
-        // Создаем HTML страницу, которая сохранит токен и перенаправит пользователя
+        // HTML страница, которая сохранит токен и перенаправит пользователя
         String html = """
             <!DOCTYPE html>
             <html>
